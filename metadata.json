@@ -1,0 +1,6 @@
+{
+  "name": "GEES - Global Education Expert Services",
+  "description": "Production international education consultancy platform, university database, student CRM, application processing, agent commission tracking, and management analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
