@@ -11,7 +11,7 @@ interface StepsRoadmapSectionProps {
 }
 
 export const StepsRoadmapSection: React.FC<StepsRoadmapSectionProps> = ({ onOpenBooking }) => {
-  const [activeStep, setActiveStep] = useState<number>(4); // Default to Step 4 matching Screenshot 7
+  const [activeStep, setActiveStep] = useState<number | null>(null); // None open by default until student clicks
   const [deepDiveStep, setDeepDiveStep] = useState<number | null>(null);
 
   const stepsData = [
@@ -60,7 +60,7 @@ export const StepsRoadmapSection: React.FC<StepsRoadmapSectionProps> = ({ onOpen
   ];
 
   return (
-    <section className="w-full py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/60 dark:bg-[#0B1329] border-t border-slate-100 dark:border-slate-800">
+    <section id="steps-roadmap-section" className="w-full py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-slate-50/60 dark:bg-[#0B1329] border-t border-slate-100 dark:border-slate-800">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <header className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
@@ -114,7 +114,7 @@ export const StepsRoadmapSection: React.FC<StepsRoadmapSectionProps> = ({ onOpen
               return (
                 <div
                   key={step.num}
-                  onClick={() => setActiveStep(isActive ? 0 : stepNumber)}
+                  onClick={() => setActiveStep(isActive ? null : stepNumber)}
                   className={`rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer ${
                     isActive
                       ? 'border-[#f59e0b] bg-amber-50/50 dark:bg-slate-800 shadow-md ring-1 ring-amber-400/40'

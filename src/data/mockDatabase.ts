@@ -685,6 +685,32 @@ export const mockDestinations: DestinationCountry[] = [
     citiesText: 'Kuala Lumpur, Penang, Johor Bahru, Selangor',
     bgImageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZd5n2tNuLtUbnkYxop24Dh6YXppoO22AesWMq9Da4U_hH8TSpxJJNI9Y_MBNshJzyKQcfIb8mPPWk0Mn0SVK1To7DY3uHnMLWe0B1YurXdva4mDR3KbXcAyqOo_xz3y4dg9yRenJJnoK3fziRYHUzfqdQ0JTWL0jBgdRRTMm6dwqPU72Xo-wGUcIwNmYEaiAnE_G-NZ9a3pU9GpcdoC78ZFo0PT9BQEGrMrHNQK4240l6syDpLlX3uw',
     overview: 'The leading educational powerhouse of Southeast Asia, offering dual awards from top UK/Australian universities at one-third the cost.'
+  },
+  {
+    code: 'DE',
+    name: 'Germany',
+    flagEmoji: '🇩🇪',
+    unisCountText: '400+ Unis',
+    studentsCountText: '400K+ students',
+    intakeText: 'Oct & April',
+    avgTuitionText: '€0 - €3,000 / yr (Mostly Free)',
+    pswText: '18-Month Post-Study Job Seeker Visa',
+    citiesText: 'Munich, Berlin, Frankfurt, Hamburg, Aachen',
+    bgImageUrl: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1200&auto=format&fit=crop',
+    overview: 'Europe’s leading economic superpower with tuition-free public universities, world-class automotive & STEM programs, and high-demand tech jobs.'
+  },
+  {
+    code: 'IE',
+    name: 'Ireland',
+    flagEmoji: '🇮🇪',
+    unisCountText: '30+ Unis',
+    studentsCountText: '35K+ students',
+    intakeText: 'Sept & Jan',
+    avgTuitionText: '€11,000 - €22,000 / yr',
+    pswText: '2-Year Stay Back Third Level Graduate Scheme',
+    citiesText: 'Dublin, Cork, Galway, Limerick',
+    bgImageUrl: 'https://images.unsplash.com/photo-1549918864-48ac978761a4?q=80&w=1200&auto=format&fit=crop',
+    overview: 'The Silicon Valley of Europe housing EMEA headquarters of Google, Apple, and Meta, with 2-year post-study work visas for master graduates.'
   }
 ];
 

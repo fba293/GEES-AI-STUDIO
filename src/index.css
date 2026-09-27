@@ -37,6 +37,98 @@
   transform-style: preserve-3d;
 }
 
+/* Services section layout & stacking isolation to prevent carousel from ever overlapping the title */
+.services-section-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  isolation: isolate;
+}
+
+.services-title-wrapper {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  pointer-events: auto;
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .services-title-wrapper {
+    margin-bottom: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-title-wrapper {
+    margin-bottom: 5rem;
+  }
+}
+
+.services-grid-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .services-grid-container {
+    margin-top: 1.5rem;
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-grid-container {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .services-grid-container {
+    margin-top: 4rem;
+    padding-top: 2.5rem;
+  }
+}
+
+/* Continuous CSS right-to-left loop keyframes */
+@keyframes loopRightToLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Continuous animation track */
+.animate-loop-rtl,
+.services-loop-track {
+  display: flex;
+  width: max-content;
+  animation: loopRightToLeft 32s linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover: Pauses both CSS animation and component state */
+.services-grid-container:hover,
+.services-grid-container:hover .animate-loop-rtl,
+.services-grid-container:hover .services-loop-track,
+.services-grid-container:hover * {
+  animation-play-state: paused !important;
+}
+
 .word-span {
   display: inline-block;
   white-space: pre;

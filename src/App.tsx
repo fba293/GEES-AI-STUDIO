@@ -11,6 +11,7 @@ import { Footer } from './components/common/Footer.tsx';
 import { MobileDrawer } from './components/common/MobileDrawer.tsx';
 import { SearchModal } from './components/common/SearchModal.tsx';
 import { ConsultationModal } from './components/common/ConsultationModal.tsx';
+import { SectionDivider } from './components/common/SectionDivider.tsx';
 
 // Home Page Sections
 import { HeroSection } from './components/home/HeroSection.tsx';
@@ -106,7 +107,7 @@ export default function App() {
       />
 
       {/* Main Routed Content */}
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pt-28 sm:pt-32">
         {currentView === 'home' && (
           <div className="flex flex-col w-full">
             {/* 1. Hero Section with Typewriter & Fuzzy Search */}
@@ -115,19 +116,22 @@ export default function App() {
               onOpenConsultationModal={handleOpenBookingModal}
             />
 
-            {/* 2. 3D Coverflow Services Carousel */}
+            {/* 2. Why Choose GEES Section */}
+            <WhyChooseSection
+              onSelectCountry={(countryName) => {
+                handleNavigate('destinations', countryName);
+              }}
+            />
+
+            {/* Transition Divider between Why Choose GEES and Our Services */}
+            <SectionDivider variant="layered-wave" accentGlow height="md" />
+
+            {/* 3. 3D Coverflow Services Carousel */}
             <ServicesCoverflow
               onSelectService={(service: ServiceItem) => {
                 setIsConsultationModalOpen(true);
               }}
               onViewAllServices={() => handleNavigate('services')}
-            />
-
-            {/* 3. Why Choose GEES Section */}
-            <WhyChooseSection
-              onSelectCountry={(countryName) => {
-                handleNavigate('destinations', countryName);
-              }}
             />
 
             {/* 4. 6 Steps to Your Goal Roadmap */}
