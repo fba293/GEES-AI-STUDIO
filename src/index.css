@@ -147,3 +147,84 @@
   opacity: 1;
   transform: translateY(0px);
 }
+
+/* Infinite Marquee Animations for Partners */
+@keyframes marquee-scroll-forward {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-scroll-reverse {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-forward {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-forward 42s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-reverse 42s linear infinite;
+  will-change: transform;
+}
+
+.marquee-wrapper:hover .animate-marquee-forward,
+.marquee-wrapper:hover .animate-marquee-reverse {
+  animation-play-state: paused;
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%);
+}
+
+.partner-card {
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.partner-card:hover {
+  transform: translateY(-4px) scale(1.025);
+  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  border-color: #94a3b8;
+}
+
+.magnetic-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.magnetic-btn .arr-1 {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+.magnetic-btn .arr-2 {
+  position: absolute;
+  transform: translateX(-150%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+.magnetic-btn:hover .arr-1 {
+  transform: translateX(150%);
+  opacity: 0;
+}
+.magnetic-btn:hover .arr-2 {
+  transform: translateX(0);
+  opacity: 1;
+}
+.magnetic-btn .circle {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.magnetic-btn:hover .circle {
+  transform: scale(1.08);
+}

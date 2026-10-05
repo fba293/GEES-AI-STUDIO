@@ -412,7 +412,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                     { icon: '🧭', label: 'Application Tracker', action: () => { onRoleChange('student'); onNavigate('student-portal'); } },
                     { icon: '📖', label: 'Students Guide', action: () => onNavigate('apply') },
                     { icon: '📁', label: 'Resources', action: () => onNavigate('courses') },
-                    { icon: '❓', label: 'FAQs', action: () => onNavigate('apply') }
+                    { 
+                      icon: '❓', 
+                      label: 'FAQs', 
+                      action: () => {
+                        onNavigate('home');
+                        setTimeout(() => {
+                          document.getElementById('faqs')?.scrollIntoView({ behavior: 'smooth' });
+                        }, 120);
+                      } 
+                    }
                   ].map((item) => (
                     <li key={item.label}>
                       <button

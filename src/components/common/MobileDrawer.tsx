@@ -566,7 +566,16 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                           { icon: '🧭', label: 'Application Tracker', action: () => { onRoleChange?.('student'); handleNav('student-portal'); } },
                           { icon: '📖', label: 'Students Guide', action: () => handleNav('apply') },
                           { icon: '📁', label: 'Resources', action: () => handleNav('courses') },
-                          { icon: '❓', label: 'FAQs', action: () => handleNav('apply') }
+                          { 
+                            icon: '❓', 
+                            label: 'FAQs', 
+                            action: () => {
+                              handleNav('home');
+                              setTimeout(() => {
+                                document.getElementById('faqs')?.scrollIntoView({ behavior: 'smooth' });
+                              }, 120);
+                            } 
+                          }
                         ].map((btn, i) => (
                           <button
                             key={i}

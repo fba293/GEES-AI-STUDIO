@@ -8,6 +8,8 @@ import React, { useState, useEffect } from 'react';
 import { UserRole, ServiceItem } from './types/index.ts';
 import { Navbar } from './components/common/Navbar.tsx';
 import { Footer } from './components/common/Footer.tsx';
+import { PreFooterCta } from './components/common/PreFooterCta.tsx';
+import { PartnersMarqueeSection } from './components/home/PartnersMarqueeSection.tsx';
 import { MobileDrawer } from './components/common/MobileDrawer.tsx';
 import { SearchModal } from './components/common/SearchModal.tsx';
 import { ConsultationModal } from './components/common/ConsultationModal.tsx';
@@ -23,6 +25,7 @@ import { CounselorsSection } from './components/home/CounselorsSection.tsx';
 import { StudentStoriesReels } from './components/home/StudentStoriesReels.tsx';
 import { SuccessStoriesSection } from './components/home/SuccessStoriesSection.tsx';
 import { BlogsUpdatesSection } from './components/home/BlogsUpdatesSection.tsx';
+import { FaqSection } from './components/home/FaqSection.tsx';
 
 // Ecosystem Portal Views
 import { StudentPortalView } from './components/portal/StudentPortalView.tsx';
@@ -33,8 +36,13 @@ import { AnalyticsAiView } from './components/portal/AnalyticsAiView.tsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<string>(() => {
-    if (typeof window !== 'undefined' && (window.location.pathname.includes('blog') || window.location.href.includes('blog.html'))) {
-      return 'blog';
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname.includes('blog') || window.location.href.includes('blog.html')) {
+        return 'blog';
+      }
+      if (window.location.pathname.includes('faq') || window.location.href.includes('faq.html')) {
+        return 'faq';
+      }
     }
     return 'home';
   });
@@ -86,6 +94,11 @@ export default function App() {
       }, 100);
     } else if (view === 'apply') {
       setIsConsultationModalOpen(true);
+    } else if (view === 'faq') {
+      setCurrentView('faq');
+      if (typeof window !== 'undefined') {
+        window.history.pushState({}, '', 'faq.html');
+      }
     } else {
       setCurrentView(view);
     }
@@ -168,6 +181,17 @@ export default function App() {
           </div>
         )}
 
+        {/* Dynamic Route: Full FAQ Directory Page */}
+        {currentView === 'faq' && (
+          <div className="py-6">
+            <FaqSection
+              isCompact={false}
+              onOpenConsultation={() => setIsConsultationModalOpen(true)}
+              onNavigate={handleNavigate}
+            />
+          </div>
+        )}
+
         {/* Dynamic Route: Universities & Courses Directory */}
         {currentView === 'universities' && (
           <UniversityExplorerView
@@ -225,6 +249,24 @@ export default function App() {
           <AnalyticsAiView />
         )}
       </main>
+
+      {/* Our Partners Showcase Section */}
+      <PartnersMarqueeSection onNavigate={handleNavigate} />
+
+      {/* Frequently Asked Section (Placed after Our Partners and before Still Wondering) */}
+      {currentView === 'home' && (
+        <FaqSection
+          isCompact={true}
+          onOpenConsultation={() => setIsConsultationModalOpen(true)}
+          onNavigate={handleNavigate}
+        />
+      )}
+
+      {/* Pre-Footer Call To Action Section: Still wondering what to do? */}
+      <PreFooterCta
+        onOpenConsultation={() => setIsConsultationModalOpen(true)}
+        onNavigate={handleNavigate}
+      />
 
       {/* Primary Global Footer */}
       <Footer onNavigate={handleNavigate} />
