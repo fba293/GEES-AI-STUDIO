@@ -397,131 +397,87 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Contact Dropdown Panel */}
             <div className="absolute top-[calc(100%-6px)] right-0 w-[620px] bg-white dark:bg-[#0f172a] rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 grid grid-cols-3 gap-6 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-3 block">
-                  Contact
-                </span>
+              {/* Column 1: Contact */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="material-symbols-outlined text-[18px] text-blue-600">contact_support</span>
+                  <span className="text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-400 font-bold">
+                    Contact
+                  </span>
+                </div>
                 <ul className="space-y-1">
-                  <li>
-                    <button
-                      onClick={() => onNavigate('apply')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Contact Us
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('apply')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Language Centers
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        onRoleChange('student');
-                        onNavigate('student-portal');
-                      }}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Application Tracker
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('apply')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Students Guide
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('courses')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Resources
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('apply')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      FAQs
-                    </button>
-                  </li>
+                  {[
+                    { icon: '📞', label: 'Contact Us', action: () => onNavigate('apply') },
+                    { icon: '🌐', label: 'Language Centers', action: () => onNavigate('apply') },
+                    { icon: '🧭', label: 'Application Tracker', action: () => { onRoleChange('student'); onNavigate('student-portal'); } },
+                    { icon: '📖', label: 'Students Guide', action: () => onNavigate('apply') },
+                    { icon: '📁', label: 'Resources', action: () => onNavigate('courses') },
+                    { icon: '❓', label: 'FAQs', action: () => onNavigate('apply') }
+                  ].map((item) => (
+                    <li key={item.label}>
+                      <button
+                        onClick={item.action}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors font-medium text-xs text-left cursor-pointer"
+                      >
+                        <span className="text-base leading-none">{item.icon}</span>
+                        <span>{item.label}</span>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-3 block">
-                  About Us
-                </span>
+              {/* Column 2: About Us */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="material-symbols-outlined text-[18px] text-blue-600">info</span>
+                  <span className="text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-400 font-bold">
+                    About Us
+                  </span>
+                </div>
                 <ul className="space-y-1">
-                  <li>
-                    <button
-                      onClick={() => onNavigate('home')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      About Us
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('home')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Message from Director
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        onNavigate('home');
-                        setTimeout(() => {
-                          window.scrollTo({ top: 1800, behavior: 'smooth' });
-                        }, 100);
-                      }}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Success Stories
-                    </button>
-                  </li>
+                  {[
+                    { icon: 'ℹ️', label: 'About Us', action: () => onNavigate('home') },
+                    { icon: '✉️', label: 'Message from Director', action: () => onNavigate('home') },
+                    { icon: '🏆', label: 'Success Stories', action: () => { onNavigate('home'); setTimeout(() => { window.scrollTo({ top: 1800, behavior: 'smooth' }); }, 100); } }
+                  ].map((item) => (
+                    <li key={item.label}>
+                      <button
+                        onClick={item.action}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors font-medium text-xs text-left cursor-pointer"
+                      >
+                        <span className="text-base leading-none">{item.icon}</span>
+                        <span>{item.label}</span>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-3 block">
-                  News & Updates
-                </span>
+              {/* Column 3: News & Updates */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
+                  <span className="material-symbols-outlined text-[18px] text-blue-600">newspaper</span>
+                  <span className="text-[11px] uppercase tracking-wider text-slate-400 dark:text-slate-400 font-bold">
+                    News & Updates
+                  </span>
+                </div>
                 <ul className="space-y-1">
-                  <li>
-                    <button
-                      onClick={() => onNavigate('blog')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Events
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('blog')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      News
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => onNavigate('blog')}
-                      className="w-full text-left text-xs text-slate-700 dark:text-slate-300 hover:text-blue-600 font-medium py-1.5 px-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 block transition-colors cursor-pointer"
-                    >
-                      Blog
-                    </button>
-                  </li>
+                  {[
+                    { icon: '🗓️', label: 'Events', action: () => onNavigate('blog') },
+                    { icon: '📰', label: 'News', action: () => onNavigate('blog') },
+                    { icon: '✍️', label: 'Blog', action: () => onNavigate('blog') }
+                  ].map((item) => (
+                    <li key={item.label}>
+                      <button
+                        onClick={item.action}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors font-medium text-xs text-left cursor-pointer"
+                      >
+                        <span className="text-base leading-none">{item.icon}</span>
+                        <span>{item.label}</span>
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

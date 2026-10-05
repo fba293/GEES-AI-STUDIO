@@ -240,6 +240,7 @@ export default function App() {
           setIsMobileMenuOpen(false);
           setIsSearchModalOpen(true);
         }}
+        onRoleChange={setActiveRole}
       />
 
       {/* Global Search Modal */}
