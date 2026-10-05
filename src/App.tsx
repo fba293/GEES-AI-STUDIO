@@ -32,7 +32,12 @@ import { AgentPortalView } from './components/portal/AgentPortalView.tsx';
 import { AnalyticsAiView } from './components/portal/AnalyticsAiView.tsx';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<string>('home');
+  const [currentView, setCurrentView] = useState<string>(() => {
+    if (typeof window !== 'undefined' && (window.location.pathname.includes('blog') || window.location.href.includes('blog.html'))) {
+      return 'blog';
+    }
+    return 'home';
+  });
   const [activeRole, setActiveRole] = useState<UserRole>('student');
   const [selectedCountrySlug, setSelectedCountrySlug] = useState<string>('all');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

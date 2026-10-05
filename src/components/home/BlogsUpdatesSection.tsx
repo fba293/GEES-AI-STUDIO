@@ -255,6 +255,17 @@ export const BlogsUpdatesSection: React.FC<BlogsUpdatesSectionProps> = ({ onOpen
         )}
       </div>
 
+      {/* View More Articles Footer Link Redirecting to blog.html */}
+      <div className="mt-12 sm:mt-14 text-center">
+        <a
+          href="blog.html"
+          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-[#fbb034] hover:text-slate-950 dark:hover:bg-[#fbb034] dark:hover:text-slate-950 font-bold text-sm sm:text-base shadow-md hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
+        >
+          <span>More Articles</span>
+          <span className="material-symbols-outlined text-lg font-bold">arrow_forward</span>
+        </a>
+      </div>
+
       {/* Reading Article Modal */}
       {activeReadingModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
