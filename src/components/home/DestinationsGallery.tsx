@@ -4,10 +4,9 @@
  * GEES "Choose your Destination" Infinite Looping Interactive Gallery
  * Features:
  * - Big, bold typographic header matching "Our Services" and "6 Steps to Your Goal"
- * - Automated continuous right-to-left loop with seamless infinite reset
- * - Soft white shade gradient fade masks on both left and right sides
- * - Smooth desktop mouse drag-to-scroll (cursor-grab / cursor-grabbing)
- * - Mobile & tablet responsive touch swipe with momentum
+ * - Automated continuous 120 FPS hardware-accelerated infinite loop (translate3d)
+ * - Narrow, subtle edge gradient borders (reduced white overlay on both sides)
+ * - Smooth desktop mouse & mobile touch drag-to-scroll with pointer capture
  * - Interactive modal with university counts, intake dates, tuition, and PR/visa rights
  */
 
@@ -25,51 +24,83 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
   onOpenConsultation
 }) => {
   const [selectedCountry, setSelectedCountry] = useState<DestinationCountry | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const posRef = useRef<number>(0);
+  const targetOffsetRef = useRef<number>(0);
+  const isPausedRef = useRef<boolean>(false);
+  const isDraggingRef = useRef<boolean>(false);
   const dragStartXRef = useRef<number>(0);
-  const scrollStartRef = useRef<number>(0);
+  const dragStartPosRef = useRef<number>(0);
   const hasDraggedRef = useRef<boolean>(false);
+  const lastTimeRef = useRef<number | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Triple destinations for seamless infinite scroll loop
   const infiniteDestinations = [...mockDestinations, ...mockDestinations, ...mockDestinations];
 
-  // Set initial scroll offset to middle set on mount
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const timer = setTimeout(() => {
-      if (el && el.scrollWidth > 0) {
-        el.scrollLeft = el.scrollWidth / 3;
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
+  const scheduleResume = useCallback((delayMs: number = 1800) => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+    resumeTimeoutRef.current = setTimeout(() => {
+      isPausedRef.current = false;
+    }, delayMs);
   }, []);
 
-  // Continuous right-to-left smooth auto-scrolling
+  // Continuous 120 FPS hardware-accelerated auto-scrolling
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+    const track = trackRef.current;
+    if (!track) return;
 
-    const scrollSpeed = 0.75; // Pixels per frame (~45-50px/sec at 60fps)
-
-    const loop = () => {
-      if (!isPaused && !isDragging && el) {
-        el.scrollLeft += scrollSpeed;
-
-        const oneSetWidth = el.scrollWidth / 3;
-        // Seamless wrap around when reaching the end of the second set
-        if (el.scrollLeft >= oneSetWidth * 2) {
-          el.scrollLeft -= oneSetWidth;
-        } else if (el.scrollLeft <= 5) {
-          el.scrollLeft += oneSetWidth;
+    // Set initial position to the middle set for seamless bi-directional scrolling
+    const initTimer = setTimeout(() => {
+      if (track) {
+        const oneSet = track.scrollWidth / 3;
+        if (oneSet > 0 && posRef.current === 0) {
+          posRef.current = oneSet;
+          track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
         }
+      }
+    }, 60);
+
+    const speed = 44; // Pixels per second for smooth, steady drift
+
+    const loop = (time: number) => {
+      if (lastTimeRef.current === null) {
+        lastTimeRef.current = time;
+      }
+      const delta = Math.min((time - lastTimeRef.current) / 1000, 0.05);
+      lastTimeRef.current = time;
+
+      if (track) {
+        const oneSetWidth = track.scrollWidth / 3;
+
+        // Smoothly interpolate towards targetOffset when arrow buttons are clicked
+        if (Math.abs(targetOffsetRef.current) > 0.5) {
+          const step = targetOffsetRef.current * 0.12;
+          posRef.current += step;
+          targetOffsetRef.current -= step;
+        }
+
+        // Auto-scroll when not paused or dragging
+        if (!isPausedRef.current && !isDraggingRef.current) {
+          posRef.current += speed * delta;
+        }
+
+        // Seamless wrap-around boundary check
+        if (oneSetWidth > 0) {
+          if (posRef.current >= oneSetWidth * 2) {
+            posRef.current -= oneSetWidth;
+          } else if (posRef.current <= 0) {
+            posRef.current += oneSetWidth;
+          }
+        }
+
+        track.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
       }
 
       animationFrameRef.current = requestAnimationFrame(loop);
@@ -78,87 +109,59 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
     animationFrameRef.current = requestAnimationFrame(loop);
 
     return () => {
+      clearTimeout(initTimer);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
     };
-  }, [isPaused, isDragging]);
-
-  const scheduleResume = useCallback((delayMs: number = 1800) => {
-    if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current);
-    }
-    resumeTimeoutRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, delayMs);
   }, []);
 
-  // --- Mouse Drag to Scroll Handling ---
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    setIsDragging(true);
-    setIsPaused(true);
-    hasDraggedRef.current = false;
-    dragStartXRef.current = e.pageX;
-    scrollStartRef.current = el.scrollLeft;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const el = containerRef.current;
-    if (!el) return;
-
-    const deltaX = e.pageX - dragStartXRef.current;
-    if (Math.abs(deltaX) > 6) {
-      hasDraggedRef.current = true;
-    }
-
-    el.scrollLeft = scrollStartRef.current - deltaX;
-  };
-
-  const handleMouseUp = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      scheduleResume(1600);
-    }
-  };
-
-  // --- Mobile & Tablet Touch Gestures ---
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    setIsPaused(true);
-    hasDraggedRef.current = false;
-    dragStartXRef.current = e.touches[0].clientX;
-    scrollStartRef.current = el.scrollLeft;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const deltaX = e.touches[0].clientX - dragStartXRef.current;
-    if (Math.abs(deltaX) > 8) {
-      hasDraggedRef.current = true;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    scheduleResume(2000);
-  };
-
-  // Quick slide arrow buttons
+  // Quick slide arrow buttons with smooth lerping
   const slideBy = (direction: 'left' | 'right') => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    setIsPaused(true);
-    const amount = direction === 'left' ? -380 : 380;
-    el.scrollBy({ left: amount, behavior: 'smooth' });
+    isPausedRef.current = true;
+    const amount = direction === 'left' ? -360 : 360;
+    targetOffsetRef.current += amount;
     scheduleResume(2400);
+  };
+
+  // Pointer drag gestures (supports mouse and touch with 1:1 fidelity)
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    isPausedRef.current = true;
+    hasDraggedRef.current = false;
+    dragStartXRef.current = e.clientX;
+    dragStartPosRef.current = posRef.current;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const diff = e.clientX - dragStartXRef.current;
+    if (Math.abs(diff) > 5) {
+      hasDraggedRef.current = true;
+    }
+    posRef.current = dragStartPosRef.current - diff;
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translate3d(-${posRef.current}px, 0, 0)`;
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+      scheduleResume(1800);
+      setTimeout(() => {
+        hasDraggedRef.current = false;
+      }, 100);
+    }
   };
 
   return (
@@ -189,17 +192,17 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
         </div>
       </div>
 
-      {/* Gallery Carousel Container with White Shades, Arrows, and Drag/Touch Support */}
+      {/* Gallery Carousel Container with Reduced White Shades, Arrows, and Drag/Touch Support */}
       <div className="relative w-full overflow-hidden">
-        {/* Left White / Dark Vignette Shade Overlay */}
+        {/* Left White / Dark Vignette Shade Overlay — Reduced width & subtle opacity */}
         <div
-          className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 lg:w-48 z-20 bg-gradient-to-r from-white via-white/80 to-transparent dark:from-[#070b19] dark:via-[#070b19]/80 dark:to-transparent"
+          className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 z-20 bg-gradient-to-r from-white/70 to-transparent dark:from-[#070b19]/70 dark:to-transparent"
           aria-hidden="true"
         />
 
-        {/* Right White / Dark Vignette Shade Overlay */}
+        {/* Right White / Dark Vignette Shade Overlay — Reduced width & subtle opacity */}
         <div
-          className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-28 md:w-36 lg:w-48 z-20 bg-gradient-to-l from-white via-white/80 to-transparent dark:from-[#070b19] dark:via-[#070b19]/80 dark:to-transparent"
+          className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 z-20 bg-gradient-to-l from-white/70 to-transparent dark:from-[#070b19]/70 dark:to-transparent"
           aria-hidden="true"
         />
 
@@ -221,25 +224,27 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
           <span className="material-symbols-outlined text-2xl font-bold">chevron_right</span>
         </button>
 
-        {/* Scrollable Track - supports Mouse Drag and Touch Gestures */}
+        {/* Scrollable Track - GPU-accelerated 120 FPS translate3d with Pointer Drag */}
         <div
           ref={containerRef}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => {
-            if (!isDragging) setIsPaused(false);
+          onMouseEnter={() => {
+            isPausedRef.current = true;
           }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onTouchCancel={handleTouchEnd}
-          className={`relative w-full overflow-x-auto no-scrollbar py-6 px-6 sm:px-12 touch-pan-x ${
-            isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
-          }`}
+          onMouseLeave={() => {
+            if (!isDraggingRef.current) {
+              isPausedRef.current = false;
+            }
+          }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          className="relative w-full overflow-hidden py-6 px-4 sm:px-8 touch-pan-y cursor-grab active:cursor-grabbing select-none"
         >
-          <div className="flex gap-5 sm:gap-6 w-max">
+          <div
+            ref={trackRef}
+            className="flex gap-5 sm:gap-6 w-max will-change-transform"
+          >
             {infiniteDestinations.map((dest, index) => (
               <div
                 key={`${dest.code}-${index}`}
@@ -315,100 +320,78 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
               onClick={() => setSelectedCountry(null)}
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[18px]">close</span>
+              <span className="material-symbols-outlined text-lg">close</span>
             </button>
 
             {/* Modal Header */}
-            <div className="flex items-center gap-3.5 mb-5">
-              <span className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl shadow-xs">
-                {selectedCountry.flagEmoji}
-              </span>
+            <div className="flex items-center gap-4 mb-6">
+              <span className="text-5xl">{selectedCountry.flagEmoji}</span>
               <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-2xl font-black text-slate-900 dark:text-white">
-                    {selectedCountry.name}
-                  </h3>
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase">
-                    {selectedCountry.unisCountText}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  {selectedCountry.studentsCountText} enrolled annually
-                </p>
+                <span className="text-xs font-bold text-amber-500 uppercase tracking-widest">
+                  Study Destination
+                </span>
+                <h3 className="text-3xl font-black text-slate-900 dark:text-white">
+                  {selectedCountry.name}
+                </h3>
               </div>
             </div>
 
-            {/* Overview */}
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-5">
-              {selectedCountry.overview}
-            </p>
-
-            {/* Metrics Grid */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700">
-                <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">
-                  Intake Windows
+            {/* Highlights Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
+                <span className="text-xs font-semibold text-slate-400 block mb-1">
+                  Partner Universities
                 </span>
-                <p className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
-                  {selectedCountry.intakeText}
-                </p>
+                <span className="text-base font-bold text-slate-900 dark:text-white">
+                  {selectedCountry.unisCountText}
+                </span>
               </div>
-
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700">
-                <span className="text-[10px] font-bold uppercase text-slate-400 block mb-1">
-                  Avg. Tuition Range
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
+                <span className="text-xs font-semibold text-slate-400 block mb-1">
+                  Average Tuition
                 </span>
-                <p className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
+                <span className="text-base font-bold text-slate-900 dark:text-white">
                   {selectedCountry.avgTuitionText}
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 col-span-2">
-                <span className="text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400 block mb-1">
-                  Post-Study Work Rights
                 </span>
-                <p className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
+              </div>
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
+                <span className="text-xs font-semibold text-slate-400 block mb-1">
+                  Major Intakes
+                </span>
+                <span className="text-base font-bold text-slate-900 dark:text-white">
+                  {selectedCountry.intakeText}
+                </span>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800">
+                <span className="text-xs font-semibold text-slate-400 block mb-1">
+                  Post-Study Work
+                </span>
+                <span className="text-base font-bold text-slate-900 dark:text-white">
                   {selectedCountry.pswText}
-                </p>
+                </span>
               </div>
             </div>
 
-            {/* Popular Cities */}
-            <div className="mb-6">
-              <span className="text-xs font-bold uppercase text-slate-500 block mb-2">
-                Prime Student Cities
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {selectedCountry.citiesText.split(',').map((city, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300"
-                  >
-                    {city.trim()}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3">
+            {/* Modal Actions */}
+            <div className="flex gap-3">
               <button
                 onClick={() => {
-                  onNavigateToCountry(selectedCountry.name);
+                  const country = selectedCountry.name;
                   setSelectedCountry(null);
+                  onNavigateToCountry(country);
                 }}
-                className="flex-1 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs text-center transition-colors shadow-sm cursor-pointer"
+                className="flex-1 py-3 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:bg-[#fbbf24] hover:text-slate-950 dark:hover:bg-[#fbbf24] dark:hover:text-slate-950 transition-all text-center cursor-pointer shadow-md"
               >
-                Browse Universities in {selectedCountry.name}
+                View Universities in {selectedCountry.name}
               </button>
               <button
                 onClick={() => {
                   setSelectedCountry(null);
-                  onOpenConsultation(selectedCountry.name);
+                  onOpenConsultation();
                 }}
-                className="py-3 px-5 rounded-xl bg-[#fbbf24] hover:bg-amber-400 text-slate-950 font-bold text-xs text-center transition-colors cursor-pointer"
+                className="py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
               >
-                Book Advisory
+                Free Consultation
               </button>
             </div>
           </div>
