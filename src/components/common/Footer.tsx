@@ -3,15 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  * GEES Global Education Expert Services - Master Footer
  * Features:
- * 1. Fully dynamic CSS grid with auto-adjusting columns (grid-cols-1 md:grid-cols-2 lg:grid-cols-4).
- * 2. Theme-adaptive background: crisp light slate (#F8FAFC) in light mode, neutral dark slate (#0B1329) in dark mode.
- * 3. Consistent office location blocks spacing and alignment across mobile, tablet, and desktop.
- * 4. Concise office timing: "Sunday–Thursday · 10:00 AM–5:00 PM".
- * 5. Background world map image with soft opacity for pristine text legibility in both light and dark themes.
- * 6. Monochrome Black & White circular social buttons.
- * 7. Quick Links: Blog, Courses, Home, Universities, Contact, Our Services.
- * 8. Legal bar: Privacy Policy, Refund Policy, Terms & Conditions.
- * 9. High-performance 120 FPS hardware-accelerated beam lighting and interactive GEES wordmark.
+ * 1. 8 Big, bold circular B&W social media icons moved above/inline with the legal bar (Privacy, Refund, Terms).
+ * 2. Single-line phone numbers directly linking to WhatsApp.
+ * 3. Office addresses linking directly to Google Maps (Dhaka & Malaysia).
+ * 4. Compact, optimized spacing across all devices with minimal empty space.
+ * 5. Theme-adaptive background (slate-50 / #0B1329) with low-opacity world map.
+ * 6. Quick links (Blog, Courses, Home, Universities, Contact, Our Services).
+ * 7. Legal bar (Privacy Policy, Refund Policy, Terms & Conditions).
+ * 8. High-performance 120 FPS hardware-accelerated interactive GEES beam wordmark.
  */
 
 import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
@@ -114,10 +113,10 @@ const CSS_BEAM = `
   position: relative;
   z-index: 1;
   overflow: hidden;
-  margin-top: clamp(16px, 4cqw, 44px);
+  margin-top: clamp(6px, 1.8cqw, 18px);
 }
 .gees-word-box {
-  padding: 0 clamp(20px, 6cqw, 88px);
+  padding: 0 clamp(16px, 5cqw, 64px);
   max-width: 1200px;
   margin: 0 auto;
   box-sizing: border-box;
@@ -366,7 +365,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       label: 'Instagram',
       href: 'https://www.instagram.com/global.eduexpert',
       icon: (
-        <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2.2" viewBox="0 0 24 24">
           <rect height="20" rx="5" ry="5" width="20" x="2" y="2" />
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
           <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
@@ -377,7 +376,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       label: 'YouTube',
       href: 'https://www.youtube.com/@globaleduexpert',
       icon: (
-        <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="1.6" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
           <rect x="2.75" y="5.5" width="18.5" height="13" rx="4" />
           <path d="M10.2 9.3v5.4l4.6-2.7-4.6-2.7Z" fill="currentColor" />
         </svg>
@@ -433,7 +432,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <footer
       ref={rootRef}
-      className="gees-footer-theme w-full pt-16 pb-6 bg-[#F8FAFC] dark:bg-[#0B1329] text-slate-700 dark:text-slate-200 border-t border-slate-200/90 dark:border-slate-800 transition-colors"
+      className="gees-footer-theme w-full pt-8 sm:pt-10 pb-3 bg-[#F8FAFC] dark:bg-[#0B1329] text-slate-700 dark:text-slate-200 border-t border-slate-200/90 dark:border-slate-800 transition-colors"
       style={vars}
       data-in={seen ? "true" : "false"}
       onPointerMove={onPointer}
@@ -448,7 +447,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <img
           src="https://www.pngkey.com/png/detail/170-1707126_world-map-footer-world-map.png"
           alt="World Map Footer - World Map@pngkey.com"
-          className="w-full h-full object-cover sm:object-contain object-center opacity-[0.06] dark:opacity-[0.10] filter brightness-90 contrast-125 dark:brightness-125 dark:contrast-125 dark:invert"
+          className="w-full h-full object-cover sm:object-contain object-center opacity-[0.05] dark:opacity-[0.08] filter brightness-90 contrast-125 dark:brightness-125 dark:contrast-125 dark:invert"
           loading="lazy"
         />
       </div>
@@ -463,100 +462,109 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       {/* Main Multi-Column Content Area */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Dynamic Responsive 4-Column CSS Grid: grid-cols-1 md:grid-cols-2 lg:grid-cols-4 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 border-b border-slate-200/90 dark:border-slate-800/80">
+        {/* Dynamic Responsive 4-Column CSS Grid with Compact Padding */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 pb-6 border-b border-slate-200/90 dark:border-slate-800/80">
           
-          {/* Col 1: Brand & Office Location Blocks with Consistent Spacing */}
-          <div className="space-y-4">
+          {/* Col 1: Brand, Office Locations with Google Maps Links & Contacts */}
+          <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-display">GEES</span>
+              <span className="text-2xl sm:text-[26px] font-black tracking-tight text-slate-900 dark:text-white font-display">GEES</span>
               <span className="w-2.5 h-2.5 rounded-full bg-[#FBB034] shadow-xs" />
             </div>
 
-            {/* Address & Operational Hours with structured icon alignment */}
-            <div className="space-y-3.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-              {/* Dhaka Office Block */}
-              <div className="flex items-start gap-2.5">
-                <span className="text-red-500 text-sm mt-0.5 shrink-0 select-none">📍</span>
+            {/* Address & Operational Hours with Google Maps Redirection */}
+            <div className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              {/* Dhaka Office Block -> Google Maps link */}
+              <a
+                href="https://maps.app.goo.gl/TgoFcTtKpkXC1KK88"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View Dhaka Office on Google Maps"
+                className="group flex items-start gap-2 text-left cursor-pointer hover:text-blue-600 dark:hover:text-amber-400 transition-colors"
+              >
+                <span className="text-red-500 text-sm mt-0.5 shrink-0 select-none group-hover:scale-110 transition-transform">📍</span>
                 <div className="min-w-0">
-                  <strong className="text-slate-900 dark:text-white block font-semibold text-xs sm:text-[13px] mb-0.5">
+                  <strong className="text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-amber-400 block font-semibold text-xs transition-colors">
                     Dhaka Office:
                   </strong>
-                  <span className="text-slate-600 dark:text-slate-300 block">
+                  <span className="text-slate-600 dark:text-slate-300 group-hover:underline block">
                     Green City Regency, Road 27/1, Level 10, Kakrail, Dhaka 1000.
                   </span>
                 </div>
-              </div>
+              </a>
 
-              {/* Malaysia Office Block */}
-              <div className="flex items-start gap-2.5">
-                <span className="text-red-500 text-sm mt-0.5 shrink-0 select-none">📍</span>
+              {/* Malaysia Office Block -> Google Maps link */}
+              <a
+                href="https://maps.app.goo.gl/8UQxEMhP4u1Bwpa66"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View Malaysia Office on Google Maps"
+                className="group flex items-start gap-2 text-left cursor-pointer hover:text-blue-600 dark:hover:text-amber-400 transition-colors"
+              >
+                <span className="text-red-500 text-sm mt-0.5 shrink-0 select-none group-hover:scale-110 transition-transform">📍</span>
                 <div className="min-w-0">
-                  <strong className="text-slate-900 dark:text-white block font-semibold text-xs sm:text-[13px] mb-0.5">
+                  <strong className="text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-amber-400 block font-semibold text-xs transition-colors">
                     Malaysia Office:
                   </strong>
-                  <span className="text-slate-600 dark:text-slate-300 block">
+                  <span className="text-slate-600 dark:text-slate-300 group-hover:underline block">
                     USJ 19 City Mall, Level 1, Subang Jaya, Selangor 47620.
                   </span>
                 </div>
-              </div>
+              </a>
 
-              {/* Office Timing: concise and aligned */}
-              <div className="flex items-center gap-2.5">
+              {/* Office Timing */}
+              <div className="flex items-center gap-2">
                 <span className="text-red-500 text-sm shrink-0 select-none">🕒</span>
                 <span className="text-slate-800 dark:text-slate-200 font-medium">
                   Sunday–Thursday · 10:00 AM–5:00 PM
                 </span>
               </div>
 
-              {/* Phone Numbers */}
-              <div className="flex items-center gap-2.5">
+              {/* Phone Numbers in 1 Single Line -> Direct WhatsApp Links */}
+              <div className="flex items-center gap-2 whitespace-nowrap">
                 <span className="text-red-500 text-sm shrink-0 select-none">📞</span>
-                <div className="flex items-center gap-2 font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                  <a href="tel:+8801805529578" className="hover:underline">+880 1805-529578</a>
+                <div className="flex items-center gap-2 font-mono font-semibold text-xs text-emerald-600 dark:text-emerald-400">
+                  <a
+                    href="https://wa.me/8801805529578"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Chat on WhatsApp (Dhaka)"
+                    className="hover:underline hover:text-emerald-700 dark:hover:text-emerald-300"
+                  >
+                    +880 1805-529578
+                  </a>
                   <span className="text-slate-400 dark:text-slate-600">/</span>
-                  <a href="tel:+601112376224" className="hover:underline">+60 11-1237 6224</a>
+                  <a
+                    href="https://wa.me/601112376224"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Chat on WhatsApp (Malaysia)"
+                    className="hover:underline hover:text-emerald-700 dark:hover:text-emerald-300"
+                  >
+                    +60 11-1237 6224
+                  </a>
                 </div>
               </div>
 
-              {/* Email strictly in 1 single line */}
-              <div className="flex items-center gap-2.5">
+              {/* Email in 1 Single Line */}
+              <div className="flex items-center gap-2 whitespace-nowrap">
                 <span className="text-red-500 text-sm shrink-0 select-none">✉️</span>
                 <a
                   href="mailto:info@globaleducationexpert.com"
-                  className="text-slate-800 dark:text-slate-200 hover:text-[#D97706] dark:hover:text-[#FBB034] font-medium whitespace-nowrap inline-block hover:underline"
+                  className="text-slate-800 dark:text-slate-200 hover:text-[#D97706] dark:hover:text-[#FBB034] font-medium inline-block hover:underline"
                 >
                   info@globaleducationexpert.com
                 </a>
               </div>
             </div>
-
-            {/* 8 Round Circular Black and White Social Media Icons */}
-            <div className="pt-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                {allSocials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    title={s.label}
-                    className="w-8 h-8 rounded-full bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-white hover:bg-slate-900 dark:hover:bg-slate-800 hover:border-slate-900 dark:hover:border-[#FBB034] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-xs hover:shadow-md"
-                  >
-                    {s.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Col 2: Study Destinations */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <h4 className="text-sm font-bold text-red-500 dark:text-red-400 tracking-wide">
               Study Destinations
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               {[
                 { flag: '🇬🇧', label: 'Study in UK', slug: 'United Kingdom' },
                 { flag: '🇦🇺', label: 'Study in Australia', slug: 'Australia' },
@@ -582,11 +590,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Col 3: Usefull Links */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <h4 className="text-sm font-bold text-red-500 dark:text-red-400 tracking-wide">
               Usefull Links
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               {[
                 { label: 'About Us', view: 'about' },
                 { label: 'Study Abroad Guidance', view: 'services', slug: 'admission-support' },
@@ -609,12 +617,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Col 4: Quick links with requested exact items */}
-          <div className="space-y-3">
+          {/* Col 4: Quick links */}
+          <div className="space-y-2.5">
             <h4 className="text-sm font-bold text-red-500 dark:text-red-400 tracking-wide">
               Quick links
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               {[
                 { label: 'Blog', view: 'blog' },
                 { label: 'Courses', view: 'courses' },
@@ -638,10 +646,31 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         </div>
 
-        {/* Bottom Legal Bar: Privacy Policy, Refund Policy, Terms & Conditions */}
-        <div className="pt-6 pb-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-          <p>© {new Date().getFullYear()} Global Education Expert Services (GEES). All rights reserved.</p>
-          <div className="flex items-center gap-6 flex-wrap">
+        {/* 8 Social Media Icons Strip directly above Legal Bar */}
+        <div className="pt-3 pb-2 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-3">
+            <p>© {new Date().getFullYear()} Global Education Expert Services (GEES). All rights reserved.</p>
+          </div>
+
+          {/* 8 Big Bold Circular B&W Social Media Icons in 1 Line */}
+          <div className="flex items-center gap-2 flex-nowrap overflow-x-auto no-scrollbar py-0.5">
+            {allSocials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                title={s.label}
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:text-white hover:bg-slate-900 dark:hover:bg-slate-800 hover:border-slate-900 dark:hover:border-[#FBB034] flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-2xs hover:shadow-xs shrink-0"
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
+
+          {/* Legal Links: Privacy Policy, Refund Policy, Terms & Conditions */}
+          <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
             <button type="button" onClick={() => onNavigate('home')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
               Privacy Policy
             </button>
@@ -659,7 +688,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div
         ref={wordRef}
         className="gees-word"
-        style={{ height: size ? wordHeight(size, base, 0.14) : "calc(0.94 * 26cqw)" }}
+        style={{ height: size ? wordHeight(size, base, 0.14) : "calc(0.94 * 22cqw)" }}
       >
         <p className="sr-only">{word}</p>
         <div className="gees-word-box">

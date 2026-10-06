@@ -12,6 +12,7 @@
 
 import React, { useState, useRef } from 'react';
 import { UserRole } from '../../types/index.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface NavbarProps {
   currentView: string;
@@ -50,20 +51,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 w-full z-50 pointer-events-none px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5">
-      <div className="pointer-events-auto max-w-7xl mx-auto bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md rounded-full border border-slate-200 dark:border-slate-800 shadow-xl px-6 lg:px-8 h-20 flex items-center justify-between transition-all">
+    <header className="fixed top-0 left-0 right-0 w-full z-50 pointer-events-none px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 lg:pt-5">
+      <div className="pointer-events-auto max-w-7xl mx-auto bg-white/95 dark:bg-[#0f172a]/95 backdrop-blur-md rounded-full border border-slate-200 dark:border-slate-800 shadow-xl px-4 sm:px-6 lg:px-8 h-14 sm:h-16 lg:h-20 flex items-center justify-between transition-all">
         {/* Brand Logo */}
         <button
           onClick={() => onNavigate('home')}
-          className="flex items-center gap-2 group shrink-0 focus:outline-none cursor-pointer"
+          className="flex items-center gap-1.5 sm:gap-2 group shrink-0 focus:outline-none cursor-pointer"
         >
           <span
-            className="text-[32px] font-extrabold tracking-tight text-slate-900 dark:text-white"
+            className="text-2xl sm:text-[28px] lg:text-[32px] font-extrabold tracking-tight text-slate-900 dark:text-white"
             style={{ fontFamily: '"ITC Benguiat", "Benguiat", serif', fontWeight: 700 }}
           >
             GEES
           </span>
-          <span className="w-2.5 h-2.5 rounded-full bg-[#FBBF24]"></span>
+          <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-[#FBBF24]"></span>
         </button>
 
         {/* Universal Desktop Navigation Bar */}
@@ -494,42 +495,42 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right Action Controls */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 shrink-0">
           {/* Search Trigger Button */}
           <button
             aria-label="Search Catalog"
             onClick={onOpenSearch}
-            className="w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors cursor-pointer"
+            className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors cursor-pointer"
             type="button"
           >
-            <span className="material-symbols-outlined text-[20px]">search</span>
+            <span className="material-symbols-outlined text-[18px] sm:text-[20px]">search</span>
           </button>
 
           {/* Theme Toggle Button */}
           <button
             aria-label="Toggle Theme"
             onClick={onToggleTheme}
-            className="w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-all duration-300 cursor-pointer"
+            className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-all duration-300 cursor-pointer"
             type="button"
           >
-            <span className="material-symbols-outlined text-[20px]">
+            <span className="material-symbols-outlined text-[18px] sm:text-[20px]">
               {isDark ? 'light_mode' : 'dark_mode'}
             </span>
           </button>
 
           {/* Portal Popover with Sliding Pill Tab Switcher */}
           <div
-            className="relative hidden sm:block py-2"
+            className="relative hidden md:block py-2"
             onMouseEnter={handlePortalEnter}
             onMouseLeave={handlePortalLeave}
           >
             <button
               aria-label="Portal"
               onClick={() => setPortalOpen(!portalOpen)}
-              className="w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors cursor-pointer"
+              className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-blue-600 transition-colors cursor-pointer"
               type="button"
             >
-              <span className="material-symbols-outlined text-[20px]">account_circle</span>
+              <span className="material-symbols-outlined text-[18px] sm:text-[20px]">account_circle</span>
             </button>
 
             {/* Portal Dropdown Menu */}
@@ -776,25 +777,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Primary Universal CTA: Apply */}
-          <button
+          {/* Primary Universal CTA: Apply with Interactive Hover Button Animation */}
+          <InteractiveHoverButton
+            text="Apply"
             onClick={() => onNavigate('apply')}
-            className="h-11 px-6 rounded-full bg-[#FBBF24] hover:bg-amber-400 text-slate-900 font-bold text-sm flex items-center gap-2 shadow-sm transition-all hover:scale-[1.02] cursor-pointer"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
-            <span>Apply</span>
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-          </button>
+            className="hidden sm:inline-flex h-9 sm:h-10 lg:h-11 w-24 sm:w-28 rounded-full bg-[#fbb034] text-slate-950 border-amber-400 font-bold text-xs sm:text-sm items-center justify-center cursor-pointer select-none shadow-xs"
+          />
 
           {/* Mobile Hamburger Navigation Button */}
           <button
             aria-label="Navigation Menu"
             onClick={onOpenMobileMenu}
-            className="xl:hidden w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-sm cursor-pointer shrink-0"
+            className="xl:hidden w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-xs cursor-pointer shrink-0"
             type="button"
           >
             <svg
-              className="w-5 h-5 text-slate-900 dark:text-slate-200 transition-colors"
+              className="w-4 h-4 sm:w-5 sm:h-5 text-slate-900 dark:text-slate-200 transition-colors"
               fill="none"
               stroke="currentColor"
               strokeLinecap="round"

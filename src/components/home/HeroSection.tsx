@@ -6,11 +6,99 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { mockUniversities, mockCourses, mockDestinations, mockServices } from '../../data/mockDatabase.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface HeroSectionProps {
   onNavigate: (view: string, payload?: any) => void;
   onOpenConsultationModal: (counselorName?: string) => void;
 }
+
+// Animated Number Counter & Ticker Component
+interface StatCounterProps {
+  value: number;
+  suffix?: string;
+  label: string;
+  duration?: number;
+}
+
+const StatCounter: React.FC<StatCounterProps> = ({
+  value,
+  suffix = '',
+  label,
+  duration = 1800
+}) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  useEffect(() => {
+    if (!hasAnimated) return;
+
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const easeOutExpo = (x: number): number => {
+      return x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
+    };
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      const easedProgress = easeOutExpo(progress);
+      
+      setCount(Math.floor(easedProgress * value));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setCount(value);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [hasAnimated, value, duration]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="group relative bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-6 flex flex-col justify-center items-start shadow-xs hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+    >
+      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-amber-400/10 via-transparent to-transparent rounded-tr-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      <div className="flex items-baseline gap-0.5 text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white leading-none">
+        <span className="tabular-nums transition-all">
+          {count}
+        </span>
+        <span className="text-slate-950 dark:text-white font-black text-2xl sm:text-3xl ml-0.5 select-none">
+          {suffix}
+        </span>
+      </div>
+      
+      <span className="text-slate-600 dark:text-slate-300 font-bold text-xs sm:text-sm mt-2.5 tracking-tight group-hover:text-slate-950 dark:group-hover:text-white transition-colors">
+        {label}
+      </span>
+    </div>
+  );
+};
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onNavigate,
@@ -116,15 +204,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Title + Graduate Graphic Header */}
         <div className="w-full flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 sm:gap-10 relative">
           <div className="flex flex-col items-start flex-1 relative z-20">
-            <h1 className="text-[54px] sm:text-[76px] lg:text-[96px] font-black tracking-tight text-slate-900 dark:text-white leading-[0.95] select-none">
+            <h1 className="text-[40px] xs:text-[52px] sm:text-[76px] lg:text-[96px] font-black tracking-tight text-slate-900 dark:text-white leading-[0.95] select-none">
               Study in
             </h1>
 
             {/* Typewriter Highlight Box */}
-            <div className="mt-2 sm:mt-3 inline-block px-5 sm:px-8 py-2 sm:py-3 rounded-2xl sm:rounded-3xl shadow-sm bg-[#fbb034] transition-all duration-300">
-              <span className="text-[46px] sm:text-[68px] lg:text-[88px] font-black tracking-tight text-slate-950 leading-none inline-flex items-center min-h-[1.05em]">
+            <div className="mt-2 sm:mt-3 inline-block px-4 sm:px-8 py-1.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-sm bg-[#fbb034] transition-all duration-300 max-w-full">
+              <span className="text-[32px] xs:text-[44px] sm:text-[68px] lg:text-[88px] font-black tracking-tight text-slate-950 leading-none inline-flex items-center min-h-[1.05em] max-w-full overflow-hidden text-ellipsis">
                 <span>{displayedText}</span>
-                <span className="ml-1 inline-block w-[3px] sm:w-[5px] h-[0.75em] bg-slate-950 rounded-sm animate-pulse align-baseline"></span>
+                <span className="ml-1 inline-block w-[3px] sm:w-[5px] h-[0.75em] bg-slate-950 rounded-sm animate-pulse align-baseline shrink-0"></span>
               </span>
             </div>
 
@@ -290,14 +378,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               {/* Find Programs CTA Button */}
               <div className="lg:col-span-3 sm:col-span-2 flex items-center justify-end">
-                <button
+                <InteractiveHoverButton
                   type="button"
+                  text="Find Programs"
                   onClick={handleFindPrograms}
-                  className="w-full h-10 px-4 rounded-xl bg-slate-950 dark:bg-white hover:bg-blue-600 text-white dark:text-slate-900 hover:text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-[16px]">search</span>
-                  <span>Find Programs</span>
-                </button>
+                  className="w-full h-10 px-4 rounded-xl bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 font-bold text-xs"
+                />
               </div>
             </div>
           </div>
@@ -310,39 +396,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               { label: 'IELTS Prep', view: 'services', payload: 'ielts-preparation' },
               { label: 'Blogs & News', view: 'blog' }
             ].map((btn, idx) => (
-              <button
+              <InteractiveHoverButton
                 key={idx}
+                type="button"
+                text={btn.label}
                 onClick={() => onNavigate(btn.view, btn.payload)}
-                className="py-3.5 px-4 bg-[#fbb034] hover:bg-[#f59e0b] text-slate-950 font-bold text-sm sm:text-base rounded-2xl border-2 border-slate-950 dark:border-slate-700 transition-all shadow-xs text-center active:scale-95 cursor-pointer"
-              >
-                {btn.label}
-              </button>
+                className="w-full py-3.5 px-4 bg-white dark:bg-slate-800/80 hover:bg-[#fbb034] text-slate-950 dark:text-white font-bold text-sm sm:text-base rounded-2xl border border-amber-300 dark:border-slate-700 shadow-xs"
+              />
             ))}
           </div>
 
-          {/* 4 Animated Number Ticker Counters */}
+          {/* 4 Animated Counting Number Tickers */}
           <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mt-8 sm:mt-10">
-            {[
-              { target: '100+', label: 'Students Placed', detail: 'Worldwide Alumni' },
-              { target: '20+', label: 'Partner Universities', detail: 'Direct Institution Tie-Ups' },
-              { target: '95%', label: 'Visa Success', detail: 'High Approval Rate' },
-              { target: '2+', label: 'Global Offices', detail: 'Dhaka & Kuala Lumpur' }
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 sm:p-6 flex flex-col justify-center items-start shadow-xs hover:shadow-md transition-all hover:-translate-y-0.5"
-              >
-                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950 dark:text-white leading-none">
-                  {stat.target}
-                </div>
-                <span className="text-slate-600 dark:text-slate-300 font-bold text-xs sm:text-sm mt-2">
-                  {stat.label}
-                </span>
-                <span className="text-[11px] text-slate-400 mt-0.5">
-                  {stat.detail}
-                </span>
-              </div>
-            ))}
+            <StatCounter value={100} suffix="+" label="Students Placed" duration={1800} />
+            <StatCounter value={20} suffix="+" label="Partner Universities" duration={1500} />
+            <StatCounter value={95} suffix="%" label="Visa Success" duration={1700} />
+            <StatCounter value={2} suffix="+" label="Global Offices" duration={1200} />
           </div>
         </div>
       </div>

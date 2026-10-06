@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface WhyChooseSectionProps {
   onSelectCountry: (countryName: string) => void;
@@ -167,13 +168,12 @@ export const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ onSelectCoun
 
       {/* Explore Destinations Trigger */}
       <div className="flex justify-center mt-10">
-        <button
+        <InteractiveHoverButton
+          type="button"
+          text="Explore Destinations"
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full border border-slate-300 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 hover:bg-slate-950 hover:text-white dark:hover:bg-blue-600 active:scale-95 transition-all shadow-sm cursor-pointer"
-        >
-          <span>Explore Destinations</span>
-          <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-        </button>
+          className="px-8 py-3.5 rounded-full border-slate-300 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white bg-white dark:bg-slate-900 shadow-sm"
+        />
       </div>
 
       {/* Modal: Select a Destination (From Stitch Screen 2) */}

@@ -13,6 +13,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { mockDestinations } from '../../data/mockDatabase.ts';
 import { DestinationCountry } from '../../types/index.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface DestinationsGalleryProps {
   onNavigateToCountry: (countryName: string) => void;
@@ -180,15 +181,12 @@ export const DestinationsGallery: React.FC<DestinationsGalleryProps> = ({
 
         {/* View All CTA Pill */}
         <div className="flex items-center justify-center gap-3">
-          <button
+          <InteractiveHoverButton
+            type="button"
+            text="Explore All Destinations"
             onClick={() => onNavigateToCountry('all')}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-bold hover:bg-[#fbbf24] hover:text-slate-950 dark:hover:bg-[#fbbf24] dark:hover:text-slate-950 transition-all shadow-xs group cursor-pointer"
-          >
-            <span>Explore All Destinations</span>
-            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
-              arrow_forward
-            </span>
-          </button>
+            className="px-6 py-2.5 rounded-full bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-bold shadow-xs"
+          />
         </div>
       </div>
 

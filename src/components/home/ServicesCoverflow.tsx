@@ -15,6 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { mockServices } from '../../data/mockDatabase.ts';
 import { ServiceItem } from '../../types/index.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface ServicesCoverflowProps {
   onSelectService: (service: ServiceItem) => void;
@@ -375,14 +376,12 @@ export const ServicesCoverflow: React.FC<ServicesCoverflowProps> = ({
 
         {/* Footer Link matching index.html */}
         <div className="gees-services-coverflow__footer mt-8 sm:mt-10 text-center">
-          <button
-            onClick={onViewAllServices}
-            className="gees-services-coverflow__more inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-[#fbb034] hover:text-slate-950 dark:hover:bg-[#fbb034] dark:hover:text-slate-950 font-bold text-sm shadow-md hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          <InteractiveHoverButton
             type="button"
-          >
-            <span>View all services</span>
-            <span aria-hidden="true">→</span>
-          </button>
+            text="View all services"
+            onClick={onViewAllServices}
+            className="px-8 py-3.5 rounded-full bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 font-bold text-sm shadow-md"
+          />
         </div>
       </div>
     </section>

@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import { mockCounselors } from '../../data/mockDatabase.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -166,12 +167,11 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({
               </div>
 
               <div className="pt-3">
-                <button
+                <InteractiveHoverButton
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-2xl bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-sm shadow-lg active:scale-95 transition-all cursor-pointer"
-                >
-                  Confirm Free Appointment →
-                </button>
+                  text="Confirm Free Appointment"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 font-extrabold text-sm shadow-lg"
+                />
                 <p className="text-[11px] text-center text-slate-400 mt-2">
                   Zero commitment. 100% confidential academic guidance.
                 </p>

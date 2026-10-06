@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface StepsRoadmapSectionProps {
   onOpenBooking: () => void;
@@ -78,7 +79,7 @@ export const StepsRoadmapSection: React.FC<StepsRoadmapSectionProps> = ({ onOpen
         {/* Process Grid: Left Visual Card & Right Accordion */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-12">
           {/* Left Column: Counselor session photo with trust pill */}
-          <div className="lg:col-span-5 flex flex-col items-center sticky top-24">
+          <div className="lg:col-span-5 flex flex-col items-center lg:sticky lg:top-24">
             <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               <img
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmxWeNh7tryz5Ui6SbdMmMasVp5_mcakVeZkNW8gNg_1gZe6pLxsfqJ-cVa6DhoMo8dyDswM0Bvk51sqpt2_dcePWC8WkmRxGM5ZWvkNM7IV8x0PJ9tG2E7DOIwirLxoErAea2uVmX_N0pFBSj31KKXgVwt499uf26nRiNZ1jC400Vj9ndQVmAJRbyCDHQWWqyxAnb0Mh7atoeoHJSHyN0jFPwKJ2pZJUpg_fP79mwsGDDS0HDlBR_dLXXCz5y-sELihI"
@@ -172,14 +173,12 @@ export const StepsRoadmapSection: React.FC<StepsRoadmapSectionProps> = ({ onOpen
 
         {/* Bottom CTA */}
         <div className="flex justify-center pt-4">
-          <button
+          <InteractiveHoverButton
             type="button"
+            text="Start with a Free Consultation"
             onClick={onOpenBooking}
-            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-bold text-sm sm:text-base hover:bg-slate-50 dark:hover:bg-slate-800 hover:shadow-md active:scale-95 transition-all shadow-xs cursor-pointer"
-          >
-            <span>Start with a Free Consultation</span>
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-          </button>
+            className="px-8 py-3.5 rounded-full border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-bold text-sm sm:text-base shadow-xs"
+          />
         </div>
       </div>
 

@@ -7,6 +7,7 @@
 import React, { useState } from 'react';
 import { mockCounselors } from '../../data/mockDatabase.ts';
 import { Counselor } from '../../types/index.ts';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface CounselorsSectionProps {
   onOpenBooking: (counselorName?: string, roleTitle?: string) => void;
@@ -224,17 +225,16 @@ export const CounselorsSection: React.FC<CounselorsSectionProps> = ({ onOpenBook
                           <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
                         </a>
 
-                        {/* Book CTA */}
-                        <button
+                        {/* Book CTA with InteractiveHoverButton */}
+                        <InteractiveHoverButton
                           type="button"
+                          text="Book"
                           onClick={(e) => {
                             e.stopPropagation();
                             onOpenBooking(counselor.name, counselor.role);
                           }}
-                          className="ml-1 px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-blue-600 text-xs font-bold transition-all shadow-xs hover:scale-105 cursor-pointer"
-                        >
-                          Book
-                        </button>
+                          className="ml-1 w-20 py-1.5 px-2.5 rounded-xl bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 text-xs font-bold shadow-xs"
+                        />
                       </div>
                     </div>
                   </div>
@@ -249,13 +249,12 @@ export const CounselorsSection: React.FC<CounselorsSectionProps> = ({ onOpenBook
                   <p className="text-[10px] uppercase font-bold tracking-widest text-[#fbb034]">Fast-Track Processing</p>
                   <h5 className="text-sm font-bold mt-0.5">Need immediate advice today?</h5>
                 </div>
-                <button
+                <InteractiveHoverButton
                   type="button"
+                  text="Connect Now"
                   onClick={() => onOpenBooking('Express Desk Advisor', 'Admissions Desk')}
-                  className="px-4 py-2 bg-[#fbb034] hover:bg-amber-400 text-slate-950 text-xs font-extrabold rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
-                >
-                  Connect Now
-                </button>
+                  className="px-4 py-2 bg-amber-500 hover:bg-[#fbb034] text-slate-950 border-amber-400 text-xs font-extrabold rounded-xl shadow-sm"
+                />
               </div>
             </div>
           </div>
@@ -277,13 +276,12 @@ export const CounselorsSection: React.FC<CounselorsSectionProps> = ({ onOpenBook
             </div>
           </div>
 
-          <button
+          <InteractiveHoverButton
             type="button"
+            text="Start Free Profile Assessment"
             onClick={() => onOpenBooking('Profile Assessment Team', 'Senior Advisory')}
-            className="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-[#fbb034] hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-sm transition-transform hover:scale-[1.02] cursor-pointer"
-          >
-            Start Free Profile Assessment
-          </button>
+            className="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-amber-500 hover:bg-[#fbb034] text-slate-950 border-amber-400 font-bold text-sm shadow-sm"
+          />
         </div>
       </div>
     </section>

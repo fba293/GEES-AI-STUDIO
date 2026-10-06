@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface PartnersMarqueeSectionProps {
   onNavigate?: (view: string, payload?: any) => void;
@@ -448,22 +449,12 @@ export const PartnersMarqueeSection: React.FC<PartnersMarqueeSectionProps> = ({ 
 
       {/* Call To Action */}
       <div className="mt-14 sm:mt-18 flex justify-center px-4" data-purpose="cta-container">
-        <button
+        <InteractiveHoverButton
           type="button"
+          text="View all university partners"
           onClick={() => onNavigate?.('universities')}
-          aria-label="View all university partners"
-          className="magnetic-btn group relative inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f172a] hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-800 dark:hover:border-slate-600 text-slate-900 dark:text-white font-semibold text-base transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 cursor-pointer"
-        >
-          <span>View all university partners</span>
-          <div className="circle relative flex items-center justify-center w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-[#FBB034] transition-colors duration-300 overflow-hidden">
-            <svg className="arr-1 w-3.5 h-3.5 text-slate-800 dark:text-slate-200 group-hover:text-slate-950" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <svg className="arr-2 w-3.5 h-3.5 text-slate-900" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        </button>
+          className="px-8 py-3.5 rounded-full bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 font-bold text-sm sm:text-base shadow-md"
+        />
       </div>
     </section>
   );

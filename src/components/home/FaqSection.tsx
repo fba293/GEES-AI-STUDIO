@@ -7,6 +7,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 export interface FaqItem {
   id: string;
@@ -31,7 +32,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set(['home-faq-1']));
+  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
   const [helpfulFeedback, setHelpfulFeedback] = useState<Record<string, boolean>>({});
 
   // 6 Primary Questions specifically requested for the Homepage
@@ -501,12 +502,13 @@ export const FaqSection: React.FC<FaqSectionProps> = ({
             <a
               href="faq.html"
               onClick={handleRedirectToFaqPage}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs sm:text-sm hover:bg-slate-800 dark:hover:bg-slate-100 transition-all shadow-sm active:scale-95 cursor-pointer group"
+              className="inline-block"
             >
-              <span>Show All FAQs</span>
-              <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-1">
-                arrow_forward
-              </span>
+              <InteractiveHoverButton
+                type="button"
+                text="Show All FAQs"
+                className="px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white font-bold text-xs sm:text-sm shadow-sm"
+              />
             </a>
           </div>
         ) : (

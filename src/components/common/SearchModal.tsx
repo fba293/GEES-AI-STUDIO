@@ -2,6 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * GEES Global Search & Intelligent Suggestions Modal
+ * Features live text highlighting for universities, courses, and services.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -12,6 +13,31 @@ interface SearchModalProps {
   onClose: () => void;
   onSelectResult: (type: string, id: string, name: string) => void;
 }
+
+// Helper to highlight matching characters/words in search results
+const HighlightText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
+  if (!highlight.trim()) return <>{text}</>;
+  const escaped = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+  const parts = text.split(regex);
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark
+            key={i}
+            className="bg-amber-300 dark:bg-amber-500/40 text-slate-900 dark:text-amber-200 font-bold px-0.5 rounded"
+          >
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+};
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
@@ -40,7 +66,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         u.country.toLowerCase().includes(q) || 
         u.city.toLowerCase().includes(q)
       )
-    : mockUniversities.slice(0, 3);
+    : mockUniversities.slice(0, 4);
 
   const matchedCourses = q
     ? mockCourses.filter(c => 
@@ -78,14 +104,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="text-slate-400 hover:text-slate-600 p-1 rounded-full"
+              className="text-slate-400 hover:text-slate-600 p-1 rounded-full cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">close</span>
             </button>
           )}
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -111,7 +137,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <button
                     key={chip}
                     onClick={() => setQuery(chip)}
-                    className="px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors"
+                    className="px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
                   >
                     {chip}
                   </button>
@@ -120,7 +146,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </div>
           )}
 
-          {/* Universities Results */}
+          {/* Universities Results with Highlighting */}
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block">
               Universities ({matchedUnis.length})
@@ -133,14 +159,16 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onSelectResult('university', uni.id, uni.name);
                     onClose();
                   }}
-                  className="w-full text-left flex items-center gap-3 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition-all group"
+                  className="w-full text-left flex items-center gap-3 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition-all group cursor-pointer"
                 >
                   <span className="text-2xl">{uni.flagEmoji}</span>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-600">
-                      {uni.name}
+                      <HighlightText text={uni.name} highlight={query} />
                     </h4>
-                    <p className="text-xs text-slate-500 truncate">{uni.city}, {uni.country} • World Rank #{uni.rankingWorld}</p>
+                    <p className="text-xs text-slate-500 truncate">
+                      <HighlightText text={`${uni.city}, ${uni.country}`} highlight={query} /> • World Rank #{uni.rankingWorld}
+                    </p>
                   </div>
                   <span className="material-symbols-outlined text-slate-400 group-hover:text-blue-600 text-[18px]">
                     arrow_forward
@@ -150,7 +178,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </div>
           </div>
 
-          {/* Courses Results */}
+          {/* Courses Results with Highlighting */}
           <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block">
               Programs & Degrees ({matchedCourses.length})
@@ -163,48 +191,48 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onSelectResult('course', c.id, c.title);
                     onClose();
                   }}
-                  className="w-full text-left flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all group"
+                  className="w-full text-left flex items-center justify-between p-3 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition-all group cursor-pointer"
                 >
-                  <div className="min-w-0 flex-1 pr-3">
-                    <span className="font-bold text-sm text-slate-800 dark:text-slate-100 group-hover:text-blue-600 truncate block">
-                      {c.title}
-                    </span>
-                    <span className="text-xs text-slate-500 truncate block">
-                      {c.universityName} • {c.tuitionFeeLocal}
-                    </span>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate group-hover:text-blue-600">
+                      <HighlightText text={c.title} highlight={query} />
+                    </h4>
+                    <p className="text-xs text-slate-500 truncate">
+                      <HighlightText text={c.universityName} highlight={query} /> • {c.level} • {c.durationMonths} Months
+                    </p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600">
-                    {c.level}
+                  <span className="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400 shrink-0 ml-3">
+                    {c.tuitionFeeLocal || `$${c.annualFeeUSD.toLocaleString()}/yr`}
                   </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Services Results */}
+          {/* Services Results with Highlighting */}
           <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-500 block">
-              Services & Support ({matchedServices.length})
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block">
+              GEES Expert Services ({matchedServices.length})
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {matchedServices.map((srv) => (
+              {matchedServices.map((s) => (
                 <button
-                  key={srv.id}
+                  key={s.id}
                   onClick={() => {
-                    onSelectResult('service', srv.id, srv.title);
+                    onSelectResult('service', s.id, s.title);
                     onClose();
                   }}
-                  className="w-full text-left flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-amber-50/60 dark:hover:bg-amber-950/30 transition-all group"
+                  className="w-full text-left p-3 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition-all group cursor-pointer"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
-                    <span className="material-symbols-outlined text-[18px]">{srv.iconName}</span>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="material-symbols-outlined text-blue-600 text-[20px]">{s.iconName || 'school'}</span>
+                    <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-blue-600">
+                      <HighlightText text={s.title} highlight={query} />
+                    </h4>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-600 truncate block">
-                      {srv.title}
-                    </span>
-                    <span className="text-[11px] text-slate-400 truncate block">{srv.category}</span>
-                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+                    <HighlightText text={s.desc} highlight={query} />
+                  </p>
                 </button>
               ))}
             </div>

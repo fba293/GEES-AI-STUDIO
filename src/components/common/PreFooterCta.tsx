@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { InteractiveHoverButton } from '../ui/interactive-hover-button.tsx';
 
 interface PreFooterCtaProps {
   onOpenConsultation?: () => void;
@@ -34,11 +35,11 @@ export const PreFooterCta: React.FC<PreFooterCtaProps> = ({
             </div>
 
             {/* Main Headline matching IMAGE_2 */}
-            <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-x-3 md:gap-x-4 mb-6">
-              <h2 className="font-sans font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-900 dark:text-white tracking-tight leading-none shrink-0">
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-x-3 md:gap-x-4 mb-6 max-w-full">
+              <h2 className="font-sans font-black text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-900 dark:text-white tracking-tight leading-none shrink-0">
                 Still wondering
               </h2>
-              <span className="font-sans font-black text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-950 bg-[#fbb034] px-4 sm:px-6 md:px-8 py-1.5 sm:py-2.5 md:py-3.5 rounded-2xl md:rounded-3xl inline-flex items-center justify-center tracking-tight leading-none shadow-sm shrink-0">
+              <span className="font-sans font-black text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-950 bg-[#fbb034] px-3 sm:px-6 md:px-8 py-1.5 sm:py-2.5 md:py-3.5 rounded-2xl md:rounded-3xl inline-flex items-center justify-center tracking-tight leading-none shadow-sm shrink-0">
                 what to do?
               </span>
             </div>
@@ -48,10 +49,11 @@ export const PreFooterCta: React.FC<PreFooterCtaProps> = ({
               Message our experts to start your study abroad journey today
             </p>
 
-            {/* Call to Action Buttons */}
+            {/* Call to Action Buttons with Consistent InteractiveHoverButton Animation */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 md:mb-12 w-full sm:w-auto">
-              <button
+              <InteractiveHoverButton
                 type="button"
+                text="Book A Free Consultation"
                 onClick={() => {
                   if (onOpenConsultation) {
                     onOpenConsultation();
@@ -59,19 +61,18 @@ export const PreFooterCta: React.FC<PreFooterCtaProps> = ({
                     onNavigate('apply');
                   }
                 }}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#0f172a] dark:bg-white text-white dark:text-slate-900 font-semibold text-sm md:text-base hover:bg-slate-800 dark:hover:bg-slate-100 transition-all shadow-md group cursor-pointer active:scale-95"
-              >
-                <span className="material-symbols-outlined text-lg">calendar_month</span>
-                <span>Book A Free Consultation</span>
-                <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
-              </button>
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white dark:bg-slate-900 text-slate-950 dark:text-white border-slate-300 dark:border-slate-700 font-semibold text-sm md:text-base shadow-md"
+              />
 
               <a
                 href="tel:+8801805529578"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-sm md:text-base hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm active:scale-95"
+                className="w-full sm:w-auto inline-block"
               >
-                <span className="material-symbols-outlined text-lg text-slate-600 dark:text-slate-400">call</span>
-                <span>Call Our Office</span>
+                <InteractiveHoverButton
+                  type="button"
+                  text="Call Our Office"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-semibold text-sm md:text-base shadow-xs"
+                />
               </a>
             </div>
 
